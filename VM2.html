@@ -39,7 +39,7 @@
             padding: 1rem;
         }
 
-        /* --- melancholic background layers --- */
+        /* melancholic background layers */
         .bg-layer {
             position: fixed;
             inset: 0;
@@ -90,7 +90,7 @@
             100% { transform: translateY(105vh) translateX(40px); opacity: 0; }
         }
 
-        /* main wrapper – perfect for phones */
+        /* main wrapper */
         .main-container {
             position: relative; z-index: 1;
             width: 100%;
@@ -132,7 +132,7 @@
             text-transform: uppercase; font-style: italic; margin-top: -0.6rem;
         }
 
-        /* ---- VOICEMAIL PLAYER ---- */
+        /* VOICEMAIL PLAYER */
         .voicemail-section {
             background: var(--player-bg); border-radius: 16px; padding: 1rem 0.8rem;
             border: 1px solid rgba(255,255,255,0.05);
@@ -164,7 +164,7 @@
         .audio-info { font-size: 0.7rem; color: var(--text-muted); min-width: 60px; }
         .time-display { font-size: 0.65rem; color: var(--accent-soft); letter-spacing: 0.06em; }
 
-        /* ---- MEMORIES SLIDER ---- */
+        /* MEMORIES SLIDER */
         .memories-poem {
             font-size: 0.65rem; text-transform: uppercase; letter-spacing: 0.2em;
             color: var(--text-muted); margin-bottom: -0.2rem;
@@ -180,13 +180,12 @@
         }
         .slider::-webkit-scrollbar { display: none; }
 
-        /* memory card with media */
         .memory-card {
             flex: 0 0 92%;
             max-width: 100%;
             background: var(--memory-card-bg);
             border-radius: 22px;
-            padding: 0; /* padding removed, will use inner content padding */
+            padding: 0;
             border: 1px solid rgba(255,255,255,0.04);
             backdrop-filter: blur(8px);
             -webkit-backdrop-filter: blur(8px);
@@ -195,7 +194,7 @@
             box-shadow: 0 15px 30px rgba(0,0,0,0.4);
             position: relative;
             overflow: hidden;
-            min-height: 260px; /* ensures enough height for text */
+            min-height: 260px;
         }
 
         .memory-media {
@@ -371,7 +370,7 @@
 
         <p class="closing">
             if you ever hear this —<br>
-            <em>just know that you we're indeed a good dream, bestie.</em>
+            <em>just know that you were indeed a good dream, bestie.</em>
         </p>
     </div>
 
@@ -390,7 +389,7 @@
                 pc.appendChild(p);
             }
 
-            // audio setup
+            // audio setup with LOCKED volumes
             const voicemail = document.getElementById('voicemailAudio');
             const bgMusic = document.getElementById('bgMusic');
             const playBtn = document.getElementById('playBtn');
@@ -399,20 +398,36 @@
             const audioStatus = document.getElementById('audioStatus');
             const timeDisplay = document.getElementById('timeDisplay');
 
-            bgMusic.volume = 0.04;
-            voicemail.volume =1.0;
+            // LOCKED VOLUMES
+            bgMusic.volume = 0.04;   // background music always 0.04
+            voicemail.volume = 1.0;   // voicemail always 1.0
+
             let isPlaying = false, fadeInterval = null;
 
             function clearFade() { if(fadeInterval) clearInterval(fadeInterval); fadeInterval=null; }
             function fadeOutBg(duration=5) {
-                clearFade(); const start = bgMusic.volume, steps=20, stepT=(duration*1000)/steps, dec=start/steps;
+                clearFade();
+                const start = bgMusic.volume; // this will be 0.04
+                const steps=20, stepT=(duration*1000)/steps, dec=start/steps;
                 fadeInterval = setInterval(()=>{
                     let newVol = Math.max(0, bgMusic.volume-dec);
                     bgMusic.volume = newVol;
-                    if(newVol<=0) { clearInterval(fadeInterval); bgMusic.pause(); bgMusic.currentTime=0; bgMusic.volume=start; }
+                    if(newVol<=0) {
+                        clearInterval(fadeInterval);
+                        bgMusic.pause();
+                        bgMusic.currentTime=0;
+                        bgMusic.volume = 0.04; // restore locked volume after fade
+                    }
                 }, stepT);
             }
-            function stopAll() { clearFade(); voicemail.pause(); voicemail.currentTime=0; bgMusic.pause(); bgMusic.currentTime=0; bgMusic.volume=0.12; }
+            function stopAll() {
+                clearFade();
+                voicemail.pause();
+                voicemail.currentTime=0;
+                bgMusic.pause();
+                bgMusic.currentTime=0;
+                bgMusic.volume = 0.04; // reset to locked volume
+            }
             function formatTime(s) { if(isNaN(s)) return '0:00'; const m=Math.floor(s/60), sec=Math.floor(s%60); return m+':'+(sec<10?'0':'')+sec; }
             function updateTime() { timeDisplay.textContent = formatTime(voicemail.currentTime); }
             function resetUI() { playBtn.classList.remove('playing'); playIcon.style.display=''; pauseIcon.style.display='none'; audioStatus.textContent='tap to listen'; isPlaying=false; }
@@ -428,10 +443,16 @@
             playBtn.addEventListener('click', (e)=>{
                 e.preventDefault();
                 if(voicemail.readyState<2){ voicemail.load(); audioStatus.textContent='loading...'; return; }
-                if(isPlaying){ clearFade(); voicemail.pause(); bgMusic.pause(); }
-                else {
+                if(isPlaying){
+                    clearFade();
+                    voicemail.pause();
+                    bgMusic.pause();
+                } else {
                     if(voicemail.ended){ stopAll(); }
                     clearFade();
+                    // ensure locked volumes before play
+                    bgMusic.volume = 0.04;
+                    voicemail.volume = 1.0;
                     voicemail.play().catch(err=>{ audioStatus.textContent='playback error'; resetUI(); });
                     bgMusic.play().catch(()=>{});
                 }
@@ -458,13 +479,8 @@
                 dots.forEach((d,i)=> d.classList.toggle('active', i===index));
             }
 
-            // manage video playback
             function updateActiveMedia(index) {
-                // pause all videos first
-                videoElements.forEach(v => {
-                    v.pause();
-                });
-                // try to play the video in the active card
+                videoElements.forEach(v => { v.pause(); });
                 const activeCard = cards[index];
                 if (activeCard) {
                     const activeVideo = activeCard.querySelector('video');
