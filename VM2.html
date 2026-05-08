@@ -39,7 +39,6 @@
             padding: 1rem;
         }
 
-        /* melancholic background layers */
         .bg-layer {
             position: fixed;
             inset: 0;
@@ -90,7 +89,6 @@
             100% { transform: translateY(105vh) translateX(40px); opacity: 0; }
         }
 
-        /* main wrapper */
         .main-container {
             position: relative; z-index: 1;
             width: 100%;
@@ -132,7 +130,6 @@
             text-transform: uppercase; font-style: italic; margin-top: -0.6rem;
         }
 
-        /* VOICEMAIL PLAYER */
         .voicemail-section {
             background: var(--player-bg); border-radius: 16px; padding: 1rem 0.8rem;
             border: 1px solid rgba(255,255,255,0.05);
@@ -164,7 +161,6 @@
         .audio-info { font-size: 0.7rem; color: var(--text-muted); min-width: 60px; }
         .time-display { font-size: 0.65rem; color: var(--accent-soft); letter-spacing: 0.06em; }
 
-        /* MEMORIES SLIDER */
         .memories-poem {
             font-size: 0.65rem; text-transform: uppercase; letter-spacing: 0.2em;
             color: var(--text-muted); margin-bottom: -0.2rem;
@@ -180,6 +176,7 @@
         }
         .slider::-webkit-scrollbar { display: none; }
 
+        /* Memory card with active animation */
         .memory-card {
             flex: 0 0 92%;
             max-width: 100%;
@@ -195,6 +192,14 @@
             position: relative;
             overflow: hidden;
             min-height: 260px;
+            transition: transform 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94), box-shadow 0.4s ease;
+        }
+
+        /* When card is active */
+        .memory-card.active-card {
+            transform: scale(1.03);
+            box-shadow: 0 25px 50px rgba(0,0,0,0.6), 0 0 25px rgba(120,100,140,0.3);
+            z-index: 1;
         }
 
         .memory-media {
@@ -268,6 +273,7 @@
         @media (max-width: 380px) {
             .memory-content { padding: 1.2rem 1rem; font-size: 0.78rem; }
             .title { font-size: 1.1rem; }
+            .memory-card { min-height: 240px; }
         }
     </style>
 </head>
@@ -288,7 +294,6 @@
         <h1 class="title">a voicemail i never sent</h1>
         <p class="subtitle">— things i still carry —</p>
 
-        <!-- voicemail player -->
         <div class="voicemail-section">
             <p class="voicemail-label">📼 press to listen</p>
             <div class="player-row">
@@ -303,72 +308,80 @@
             <audio id="bgMusic" preload="auto" loop><source src="lifetime.mp3" type="audio/mpeg"></audio>
         </div>
 
-        <!-- swipable memories with videos and photo -->
         <div class="memories-poem">❦ moments we lived ❦</div>
         <div class="slider-wrapper">
             <div class="arrow-btn arrow-left" id="arrowLeft">←</div>
             <div class="arrow-btn arrow-right" id="arrowRight">→</div>
             <div class="slider" id="memorySlider">
-                <!-- Card 1 – The Waiting (vid1) -->
+
+                <!-- Slide 1 – vid1 -->
                 <div class="memory-card">
                     <video class="memory-media" src="vid1.mp4" muted playsinline loop preload="auto"></video>
                     <div class="memory-overlay"></div>
                     <div class="memory-content">
                         <div class="poetic-symbol">❦</div>
-                        <p>Hey… I’ve been thinking about this for a while now. Not in a dramatic way, but sometimes memories come back when everything is quiet. What felt strange about us was how normal it became to lose each other, then find our way back again.</p>
-                        <p>Even when you were gone, I still believed you’d come back eventually — and you always did. That’s probably why I never fully learned to let go. Every return felt familiar, like nothing changed.</p>
-                        <p>The calls, the conversations, even the silence felt real. Especially those late nights where we stayed on call until one of us fell asleep. I’d just stay there quietly, listening. And maybe that’s where I got attached — the small, quiet moments that felt real without us noticing.</p>
-                        <p>Even now, when the night gets too still, I sometimes catch myself waiting for the sound of your breathing on the other end, half-expecting you to speak, half-knowing you never will. That silence is still yours.</p>
+                        <p>Hey… I’ve been thinking about this for a while now. Not in a dramatic way, but sometimes memories come back when everything is quiet. What felt strange about us was how normal it became to lose each other, then find our way back again. Even now, when the night gets too still, I sometimes catch myself waiting for the sound of your breathing on the other end. That silence is still yours.</p>
+                        <p>I’ve learned that some people settle inside you without permission, and even when they leave, they never fully move out. You were one of those people for me. So much of who I became unfolded around you, and now that shape remains hollow without you in it.</p>
                     </div>
                 </div>
-                <!-- Card 2 – The Small Things (vid2) -->
+
+                <!-- Slide 2 – vid2 -->
                 <div class="memory-card">
                     <video class="memory-media" src="vid2.mp4" muted playsinline loop preload="auto"></video>
                     <div class="memory-overlay"></div>
                     <div class="memory-content">
                         <div class="poetic-symbol">❦</div>
-                        <p>What I miss the most are the small things. The “kumain ka na ba?”, the random updates, the photos for no reason. Our long calls until 4 or 5AM, just existing together in silence sometimes. It felt simple, but it became part of my routine.</p>
-                        <p>Now that it’s gone, everything feels quieter. It wasn’t one big goodbye — it was everything slowly stopping. Even now, I still find myself looking for those moments out of habit.</p>
-                        <p>I think I don’t just miss “us,” I miss the feeling of someone always being there. And when that disappears, it’s not easy to replace.</p>
-                        <p>I’ve learned that grief doesn’t always roar — sometimes it whispers in the absence of the everyday. A missing good morning, a photo that never arrives. It’s a quiet undoing, and I’m still learning to live in the space you left behind.</p>
+                        <p>What I miss the most are the small things. The “kumain ka na ba?”, the random updates, the photos for no reason. Our long calls until 4 or 5AM, just existing together in silence sometimes. It felt simple, but it became part of my routine. Now that it’s gone, everything feels quieter. It wasn’t one big goodbye — it was everything slowly stopping.</p>
+                        <p>I think I don’t just miss “us,” I miss the feeling of someone always being there. And when that disappears, it’s not easy to replace. I keep catching myself saving things to tell you, only to remember the space where you used to be. The habit of you has outlasted you.</p>
                     </div>
                 </div>
-                <!-- Card 3 – The Roadtrip & Sampaloc Lake (vid3) -->
+
+                <!-- Slide 3 – vid3 -->
                 <div class="memory-card">
                     <video class="memory-media" src="vid3.mp4" muted playsinline loop preload="auto"></video>
                     <div class="memory-overlay"></div>
                     <div class="memory-content">
                         <div class="poetic-symbol">❦</div>
-                        <p>I still think about that roadtrip. Everything felt effortless — no pressure, no labels, just us. The laughs, the silence, the closeness… it all felt natural.</p>
-                        <p>Then Sampaloc Lake at 2AM — quiet, cold, almost empty. We just sat there beside each other. No need for words. I remember thinking how unreal it felt, not because of the place, but because you were there.</p>
-                        <p>After everything, you were still beside me. For a moment, everything felt calm, like maybe it would finally last. But now it feels like it happened to different versions of us.</p>
-                        <p>Sometimes I wish I could go back to that 2AM silence and freeze it — keep us exactly there, no labels, no endings, just the two of us and the cold air. Maybe then we wouldn’t have become strangers with memories.</p>
+                        <p>I still think about that roadtrip. Everything felt effortless — no pressure, no labels, just us. The laughs, the silence, the closeness… it all felt natural. Then Sampaloc Lake at 2AM — quiet, cold, almost empty. We just sat there beside each other. No need for words.</p>
+                        <p>After everything, you were still beside me. For a moment, everything felt calm, like maybe it would finally last. But now it feels like it happened to different versions of us. I wonder if you ever think back to that cold air and the silence, and if it still feels like home to you the way it still does to me.</p>
                     </div>
                 </div>
-                <!-- Card 4 – The Room & Routine (vid4) -->
+
+                <!-- Slide 4 – vid4 -->
                 <div class="memory-card">
                     <video class="memory-media" src="vid4.mp4" muted playsinline loop preload="auto"></video>
                     <div class="memory-overlay"></div>
                     <div class="memory-content">
                         <div class="poetic-symbol">❦</div>
-                        <p>One of the hardest parts was how normal everything felt when we were together. Sitting beside each other but still chatting, me playing with your hair, you asking for hotspot — those small habits became our routine. I didn’t realize how much I got used to it until it was gone.</p>
-                        <p>Even seeing you became different later on. That’s why when there were no classes, part of me felt relieved — I wasn’t sure I could handle seeing you every day knowing things had changed.</p>
-                        <p>Still, I’m thankful for those days. I hope life is being gentle with you, and I hope the things you quietly want for yourself are slowly happening.</p>
-                        <p>I remember the way your hair felt between my fingers, the way we’d laugh about nothing, the way we turned an ordinary room into the safest place on earth. I didn’t know those moments were already becoming history while we were still living them.</p>
+                        <p>One of the hardest parts was how normal everything felt when we were together. Sitting beside each other but still chatting, me playing with your hair, you asking for hotspot — those small habits became our routine. I didn’t realize how much I got used to it until it was gone. Even seeing you later became different. That’s why when there were no classes, part of me felt relieved.</p>
+                        <p>Still, I’m thankful for those days. I hope life is being gentle with you, and I hope the things you quietly want for yourself are slowly happening. You deserve a soft new chapter, even if I’m not in it. I’m learning to want that for you without needing to be part of it.</p>
                     </div>
                 </div>
-                <!-- Card 5 – The Ending (pic1) + requested lines included, now with a gentle closing -->
+
+                <!-- Slide 5 – pic2.jpeg -->
                 <div class="memory-card">
-                    <img class="memory-media" src="pic1.jpg" alt="memory">
+                    <img class="memory-media" src="pic2.jpeg" alt="memory">
                     <div class="memory-overlay"></div>
                     <div class="memory-content">
                         <div class="poetic-symbol">❦</div>
                         <p>I’m sorry we couldn’t be everything the other needed, but I hope when someone asks about me, you tell them about the love. Please, remember the love.</p>
                         <p>I think the hardest part is acceptance — that we were once so close, and now we’re not. I’m not angry, and I hope you aren’t either. Everything I said here is still real for me, but I don’t want it to end with bitterness. I’d rather it stay calm.</p>
-                        <p>If you ever read the letters I wrote for you, I hope you understand it’s my way of properly saying goodbye. And even if you don’t, that’s okay too. I just needed to say it.</p>
-                        <p>I hope you’re okay, growing, and at peace. As for us, maybe we’re just memories now — and I think I’m okay with that, because it meant something real. And when they bury me six feet under and the bugs start eating my heart, they’ll taste every ounce of love I’ve had for you. If this is the last thing you ever read from me, carry the weight of this love gently. Not as a burden, but as proof that we were real.</p>
+                        <p>If you ever read the letters I wrote for you, I hope you understand it’s my way of properly saying goodbye. And even if you don’t, that’s okay too. I just needed to say it. I needed you to know that this love wasn’t nothing. It was quiet, yes, but it filled every corner I had.</p>
                     </div>
                 </div>
+
+                <!-- Slide 6 – pic1.jpg (final) -->
+                <div class="memory-card">
+                    <img class="memory-media" src="pic1.jpg" alt="memory">
+                    <div class="memory-overlay"></div>
+                    <div class="memory-content">
+                        <div class="poetic-symbol">❦</div>
+                        <p>I hope you’re okay, growing, and at peace. As for us, maybe we’re just memories now — and I think I’m okay with that, because it meant something real.</p>
+                        <p>And when they bury me six feet under and the bugs start eating my heart, they’ll taste every ounce of love I’ve had for you. If this is the last thing you ever read from me, carry the weight of this love gently. Not as a burden, but as proof that two people once meant something that didn’t need a name.</p>
+                        <p>You were a good dream — and I’ve finally learned how to wake up without reaching for you. Sometimes I still whisper your name into the dark, just to keep the sound alive. Thank you for letting me love you in the only way I knew how.</p>
+                    </div>
+                </div>
+
             </div>
             <div class="dots" id="dotsContainer"></div>
         </div>
@@ -381,7 +394,6 @@
 
     <script>
         (function() {
-            // particles
             const pc = document.getElementById('particlesContainer');
             for (let i=0; i<35; i++) {
                 const p = document.createElement('div'); p.className='particle';
@@ -394,7 +406,6 @@
                 pc.appendChild(p);
             }
 
-            // audio setup with LOCKED volumes
             const voicemail = document.getElementById('voicemailAudio');
             const bgMusic = document.getElementById('bgMusic');
             const playBtn = document.getElementById('playBtn');
@@ -403,16 +414,14 @@
             const audioStatus = document.getElementById('audioStatus');
             const timeDisplay = document.getElementById('timeDisplay');
 
-            // LOCKED VOLUMES
-            bgMusic.volume = 0.04;   // background music always 0.04
-            voicemail.volume = 1.0;   // voicemail always 1.0
-
+            bgMusic.volume = 0.04;
+            voicemail.volume = 1.0;
             let isPlaying = false, fadeInterval = null;
 
             function clearFade() { if(fadeInterval) clearInterval(fadeInterval); fadeInterval=null; }
             function fadeOutBg(duration=5) {
                 clearFade();
-                const start = bgMusic.volume; // this will be 0.04
+                const start = bgMusic.volume;
                 const steps=20, stepT=(duration*1000)/steps, dec=start/steps;
                 fadeInterval = setInterval(()=>{
                     let newVol = Math.max(0, bgMusic.volume-dec);
@@ -421,17 +430,15 @@
                         clearInterval(fadeInterval);
                         bgMusic.pause();
                         bgMusic.currentTime=0;
-                        bgMusic.volume = 0.04; // restore locked volume after fade
+                        bgMusic.volume = 0.04;
                     }
                 }, stepT);
             }
             function stopAll() {
                 clearFade();
-                voicemail.pause();
-                voicemail.currentTime=0;
-                bgMusic.pause();
-                bgMusic.currentTime=0;
-                bgMusic.volume = 0.04; // reset to locked volume
+                voicemail.pause(); voicemail.currentTime=0;
+                bgMusic.pause(); bgMusic.currentTime=0;
+                bgMusic.volume = 0.04;
             }
             function formatTime(s) { if(isNaN(s)) return '0:00'; const m=Math.floor(s/60), sec=Math.floor(s%60); return m+':'+(sec<10?'0':'')+sec; }
             function updateTime() { timeDisplay.textContent = formatTime(voicemail.currentTime); }
@@ -455,7 +462,6 @@
                 } else {
                     if(voicemail.ended){ stopAll(); }
                     clearFade();
-                    // ensure locked volumes before play
                     bgMusic.volume = 0.04;
                     voicemail.volume = 1.0;
                     voicemail.play().catch(err=>{ audioStatus.textContent='playback error'; resetUI(); });
@@ -466,7 +472,6 @@
             voicemail.addEventListener('canplaythrough', ()=>{ playBtn.style.opacity='1'; playBtn.style.pointerEvents='auto'; audioStatus.textContent='tap to listen'; });
             window.addEventListener('beforeunload', clearFade);
 
-            // memory slider + video/picture logic
             const slider = document.getElementById('memorySlider');
             const dotsContainer = document.getElementById('dotsContainer');
             const cards = document.querySelectorAll('.memory-card');
@@ -482,6 +487,13 @@
 
             function updateActiveDot(index) {
                 dots.forEach((d,i)=> d.classList.toggle('active', i===index));
+            }
+
+            // Add/remove active-card class for animation
+            function updateActiveCard(index) {
+                cards.forEach((card, i) => {
+                    card.classList.toggle('active-card', i === index);
+                });
             }
 
             function updateActiveMedia(index) {
@@ -503,6 +515,7 @@
                 cards[index].scrollIntoView({ behavior:'smooth', block:'nearest', inline:'center' });
                 currentIndex = index;
                 updateActiveDot(currentIndex);
+                updateActiveCard(currentIndex);
                 updateActiveMedia(currentIndex);
             }
 
@@ -527,6 +540,7 @@
                 if(closest !== currentIndex){
                     currentIndex = closest;
                     updateActiveDot(currentIndex);
+                    updateActiveCard(currentIndex);
                     updateActiveMedia(currentIndex);
                 }
             });
@@ -543,7 +557,8 @@
                 touchStartX = 0;
             });
 
-            // initial play for first video
+            // Initial active card
+            updateActiveCard(0);
             updateActiveMedia(0);
         })();
     </script>
